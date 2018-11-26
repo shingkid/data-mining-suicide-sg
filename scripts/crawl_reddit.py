@@ -8,6 +8,7 @@ import socket
 import sys
 import time
 
+import numpy as np
 import pandas as pd
 import praw
 from tqdm import tqdm
@@ -90,10 +91,26 @@ def obtain_token():
 
 
 def crawl_submissions(reddit, words, subreddit_name):
+    """Crawls submissions from r/Singapore
+    
+    Parameters
+    ----------
+    reddit : Reddit
+        Reddit instance after authentication
+    words : set
+        set of words from a vocabulary file
+    subreddit_name : str
+        name of subreddit, e.g. Singapore
+
+    Returns
+    -------
+    submissiosn : DataFrame
+        DataFrame of crawled submissions
+    """
     print("Crawling submissions...")
     t0 = time.time()
     subreddit = reddit.subreddit(subreddit_name)
-    df = pd.DataFrame(columns=['title', 'score', 'id', 'url', 'comms_num', 'created', 'body', 'author_name', 'query'])
+    submissions = pd.DataFrame(columns=['title', 'score', 'id', 'url', 'comms_num', 'created', 'body', 'author_name', 'query'])
     for word in tqdm(words):
         subreddit_query = subreddit.search(word)
 
@@ -123,17 +140,17 @@ def crawl_submissions(reddit, words, subreddit_name):
 #                 topics_dict["reports_num"].append(submission.num_reports)
                 topics_dict["query"].append(word)
 
-            df = pd.concat([df, pd.DataFrame(topics_dict)])
+            submissions = pd.concat([submissions, pd.DataFrame(topics_dict)])
     print("Seconds:", time.time()-t0)
 
-    df.drop_duplicates('id', inplace=True)
-    df.reset_index(inplace=True)
-    df.drop(columns=['index'], inplace=True)
+    submissions.drop_duplicates('id', inplace=True)
+    submissions.reset_index(inplace=True)
+    submissions.drop(columns=['index'], inplace=True)
 
-    print(df)
-    df.to_csv(os.path.join('../data', 'submissions.csv'), index=False)
+    print(submissions)
+    submissions.to_csv(os.path.join('../data', 'submissions.csv'), index=False)
 
-    return df
+    return submissions
 
 
 def remove_irrelevant_posts():
@@ -157,12 +174,25 @@ def remove_irrelevant_posts():
         else:
             df.at[index, 'relevant'] = False
     
+    df = df.replace(np.nan, '', regex=True)
     print(df)
     df.to_csv(os.path.join('../data', 'submissions-clean.csv'), index=False)
     return df
 
 
 def crawl_comments(reddit):
+    """Crawl comments on submissions labeled 'relevant'
+    
+    Parameters
+    ----------
+    reddit : Reddit
+        Reddit instance after authentication
+
+    Returns
+    -------
+    comments : DataFrame
+        DataFrame of crawled comments
+    """
     filename = os.path.join('../data', 'submissions-clean.csv')
 
     if not os.path.isfile(filename):
@@ -197,21 +227,44 @@ def main():
     prog = "crawl_reddit"
     descr = "Scrape and crawl r/Singapore"
     parser = argparse.ArgumentParser(prog=prog, description=descr)
-    parser.add_argument("action", metavar='ACTION', type=int, help="Select (1) Crawl submissions, (2) Clean manually, (3) Crawl comments")
+    parser.add_argument("--s", help="Crawl submissions", action="store_true")
+    parser.add_argument("--clean", help="Clean manually", action="store_true")
+    parser.add_argument("--c", help="Crawl comments", action="store_true")
     args = parser.parse_args()
 
-    if args.action==2:
-        remove_irrelevant_posts()
-    else:
+    if args.s or args.c:
         reddit = obtain_token()
-        if args.action==1:
-            vocab_file_path = input('Enter path to vocabulary file: ')
-            while not os.path.isfile(vocab_file_path):
-                vocab_file_path = input('Invalid file. Enter path to vocabulary file: ')
-            words = file_to_set(vocab_file_path)
-            crawl_submissions(reddit, words, 'Singapore')
-        elif args.action==3:
-            crawl_comments(reddit)
+
+    if args.s:
+        vocab_file_path = input('Enter path to vocabulary file: ')
+        while not os.path.isfile(vocab_file_path):
+            vocab_file_path = input('Invalid file. Enter path to vocabulary file: ')
+        words = file_to_set(vocab_file_path)
+        crawl_submissions(reddit, words, 'Singapore')
+
+    if args.clean:
+        remove_irrelevant_posts()
+
+    if args.c:
+        crawl_comments(reddit)
+
+    DATA_DIR = '../data'
+    merged_path = os.path.join(DATA_DIR, 'merged.csv')
+    sub_path = os.path.join(DATA_DIR, 'submissions-clean.csv')
+    com_path = os.path.join(DATA_DIR, 'comments.csv')
+    print(not os.path.isfile(merged_path), os.path.isfile(sub_path), os.path.isfile(com_path))
+    if not os.path.isfile(merged_path) and os.path.isfile(sub_path) and os.path.isfile(com_path):
+        submissions = pd.read_csv(sub_path)
+        submissions = submissions[submissions.relevant]
+        print(submissions)
+        comments = pd.read_csv(com_path)
+        comments.rename(columns={'body': 'content'}, inplace = True)
+        print(comments)
+        submissions['content'] = submissions.title.map(str) + ' ' + submissions.body.map(str)
+        df = pd.concat([submissions, comments])
+        df = df[['id', 'author_name', 'content']]
+        print(df)
+        df.to_csv(merged_path, index=False)
 
 
 if __name__ == "__main__":
