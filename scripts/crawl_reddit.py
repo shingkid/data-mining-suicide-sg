@@ -104,7 +104,7 @@ def crawl_submissions(reddit, words, subreddit_name):
 
     Returns
     -------
-    submissiosn : DataFrame
+    submissions : DataFrame
         DataFrame of crawled submissions
     """
     print("Crawling submissions...")
@@ -148,7 +148,15 @@ def crawl_submissions(reddit, words, subreddit_name):
     submissions.drop(columns=['index'], inplace=True)
 
     print(submissions)
-    submissions.to_csv(os.path.join('../data', 'submissions.csv'), index=False)
+    sub_path = os.path.join('../data', 'submissions.csv')
+    if os.path.isfile(sub_path):
+        replace = input("File already exists. Replace %s? [y/n]" % sub_path)
+        if replace=='y':
+            print("Saving to %s" % sub_path)
+            submissions.to_csv(sub_path, index=False)
+    else:
+        print("Saving to %s" % sub_path)
+        submissions.to_csv(sub_path, index=False)
 
     return submissions
 
@@ -157,10 +165,11 @@ def remove_irrelevant_posts():
     """Manually screen through every submission and determine its relevance"""
     filename = os.path.join('../data', 'submissions.csv')
     if not os.path.isfile(filename):
+        print("Need to crawl for submissions first.")
         exit()
 
     df = pd.read_csv(filename)
-    print("# submissions:", df.shape[0])
+    print("No. of submissions:", df.shape[0])
     for index, row in df.iterrows():
         print(index, 'Query:', row.query)
         print('Title:', row.title)
@@ -176,7 +185,10 @@ def remove_irrelevant_posts():
     
     df = df.replace(np.nan, '', regex=True)
     print(df)
-    df.to_csv(os.path.join('../data', 'submissions-clean.csv'), index=False)
+    path = os.path.join('../data', 'submissions-clean.csv')
+    print("Saving to %s" % path)
+    df.to_csv(path, index=False)
+
     return df
 
 
@@ -219,7 +231,17 @@ def crawl_comments(reddit):
     print("Seconds:", time.time()-t0)
 
     comments = pd.DataFrame(comments, columns=['submission_id', 'id', 'body', 'score', 'author_name', 'created', 'parent'])
-    comments.to_csv(os.path.join('../data', 'comments.csv'), index=False)
+
+    com_path = os.path.join('../data', 'comments.csv')
+    if os.path.isfile(com_path):
+        replace = input("File already exists. Replace %s? [y/n]" % com_path)
+        if replace=='y':
+            print("Saving to %s" % com_path)
+            comments.to_csv(com_path, index=False)
+    else:
+        print("Saving to %s" % com_path)
+        comments.to_csv(com_path, index=False)
+
     return comments
 
 
@@ -228,7 +250,7 @@ def main():
     descr = "Scrape and crawl r/Singapore"
     parser = argparse.ArgumentParser(prog=prog, description=descr)
     parser.add_argument("--s", help="Crawl submissions", action="store_true")
-    parser.add_argument("--clean", help="Clean manually", action="store_true")
+    parser.add_argument("--l", help="Label submissions", action="store_true")
     parser.add_argument("--c", help="Crawl comments", action="store_true")
     args = parser.parse_args()
 
@@ -242,7 +264,7 @@ def main():
         words = file_to_set(vocab_file_path)
         crawl_submissions(reddit, words, 'Singapore')
 
-    if args.clean:
+    if args.l:
         remove_irrelevant_posts()
 
     if args.c:
@@ -264,6 +286,7 @@ def main():
         df = pd.concat([submissions, comments])
         df = df[['id', 'author_name', 'content']]
         print(df)
+        print("Saving to %s" % merged_path)
         df.to_csv(merged_path, index=False)
 
 
