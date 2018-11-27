@@ -3,9 +3,11 @@
 import datetime as dt
 import json
 import os
-import pandas as pd
 import re
 from urllib.parse import urlparse
+
+import numpy as np
+import pandas as pd
 
 from gensim.utils import simple_preprocess
 import spacy
@@ -65,15 +67,21 @@ def make_trigrams(bigram_mod, trigram_mod, texts):
     return [trigram_mod[bigram_mod[doc]] for doc in texts]
 
 
-def lemmatization(texts, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV'], dtype=list):
+def lemmatization(texts, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV'], dtype='list'):
     """https://spacy.io/api/annotation"""
     # Initialize spacy 'en' model, keeping only tagger component (for efficiency)
     nlp = spacy.load('en', disable=['parser', 'ner'])
     texts_out = []
     for sent in texts:
         doc = nlp(" ".join(sent))
-        if dtype==list:
+        if dtype=='list':
             texts_out.append([token.lemma_ for token in doc if token.pos_ in allowed_postags])
-        elif dtype==str:
+        elif dtype=='str':
             texts_out.append(" ".join([token.lemma_ if token.lemma_ not in ['-PRON-'] else '' for token in doc if token.pos_ in allowed_postags]))
+
+    # Write to file
+    print("Saving to .npy file...")
+    with open('../resources/data-clean-%s.npy' % dtype, 'wb') as outfile:
+        np.save(outfile, np.array(texts_out))
+
     return texts_out

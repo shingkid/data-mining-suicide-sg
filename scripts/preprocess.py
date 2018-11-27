@@ -2,13 +2,13 @@
 
 import argparse
 import json
-import numpy as np
 import os
-import pandas as pd
 from pprint import pprint
 import re
-from tempfile import TemporaryFile
-outfile = TemporaryFile()
+import time
+
+import numpy as np
+import pandas as pd
 
 # Gensim
 from gensim import corpora, models
@@ -84,11 +84,6 @@ def clean(data, dtype=list):
     # Do lemmatization keeping only noun, adj, vb, adv
     data_lemmatized = util.lemmatization(data_words_bigrams, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV'], dtype=dtype)
 
-    # Write to file
-    print("Saving to .npy file...")
-    with open('../resources/data-clean.npy', 'wb') as outfile:
-        np.save(outfile, np.array(data_lemmatized))
-
 
 def main():
     prog = "preprocess"
@@ -98,7 +93,7 @@ def main():
     parser.add_argument("--sklearn", help="Use Scikit-learn topic modeling", action="store_true")
     args = parser.parse_args()
 
-    content_path = os.path.join('../resources', 'content.npy')
+    content_path = os.path.join('../resources', 'data.npy')
     if not os.path.isfile(content_path):
         df = pd.read_csv('../data/merged.csv')
         print(df.shape)
@@ -114,9 +109,16 @@ def main():
         with open(content_path, 'rb') as infile:
             data = np.load(infile)
 
-    print(args.gensim, args.sklearn)
     if args.gensim:
-        clean(data)
+        t0 = time.time()
+        clean(data, dtype='list')
+        print('Seconds:', time.time()-t0)
     
     if args.sklearn:
-        clean(data, dtype=str)
+        t0 = time.time()
+        clean(data, dtype='str')
+        print('Seconds:', time.time()-t0)
+
+
+if __name__ == "__main__":
+    main()
