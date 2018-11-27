@@ -70,4 +70,4 @@ Both Gensim and Scikit-learn implementations of LDA topic modeling can be run fr
 `urlmarker.py` written by @gruber was used to Regex match urls during data cleaning.
 `malletmodel2ldamodel()` method is a fix for converting ldamallet to ldamodel provided by [Roger Mähler](https://groups.google.com/forum/#!topic/gensim/ZesMoKZCf4c).
 
-Superb guidance from Dr Kyong Jin Shim at the School of Information Systems, Singapore Management University.
+Many thanks to Dr Kyong Jin Shim for her superb support and guidance.
