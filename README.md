@@ -2,7 +2,7 @@
 ### IS470 Guided Research Project
 In this research, we focus on the social phenomenon of suicide. Specifically, we perform social sensing on digital traces obtained from Reddit. We analyze the posts and comments in that are related to suicide. We perform natural language processing to better understand different aspects of human life that relate to suicide.
 
-This repository accompanies the poster paper which was accepted for the IEEE Big Data Conference 2018 and will be presented in Seattle, WA this December.
+This repository accompanies the poster paper which was accepted for the IEEE Big Data Conference 2018 and will be presented in Seattle, WA, this December.
 
 ## Data
 The dataset consists of 406 submissions - of which 161 were deemed relevant to suicide and depression - and 9,010 comments (responding to the 161 submissions), that were crawled from https://www.reddit.com/r/singapore/ using the **PRAW API**. [Queries](resources/jashinsky.txt) were informed by previous work in *"Tracking suicide risk factors through Twitter in the US" by J. Jashinsky, S.H. Burton, C.L. Hanson, J. West, C. Giraud-Carrier, M.D. Barnes, and T. Argyle (2013)*.
@@ -68,6 +68,7 @@ Both Gensim and Scikit-learn implementations of LDA topic modeling can be run fr
 
 ## Acknowledgements
 `urlmarker.py` written by @gruber was used to Regex match urls during data cleaning.
+
 `malletmodel2ldamodel()` method is a fix for converting ldamallet to ldamodel provided by [Roger Mähler](https://groups.google.com/forum/#!topic/gensim/ZesMoKZCf4c).
 
 Many thanks to Dr Kyong Jin Shim for her superb support and guidance.
