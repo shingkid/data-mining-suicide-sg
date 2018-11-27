@@ -59,4 +59,7 @@ target/
 
 # Others
 .DS_Store
+.ipynb_checkpoints
+mallet-2.0.8
+py-googletrans
 suicide
