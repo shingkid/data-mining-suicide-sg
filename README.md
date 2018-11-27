@@ -2,7 +2,7 @@
 ### IS470 Guided Research Project
 In this research, we focus on the social phenomenon of suicide. Specifically, we perform social sensing on digital traces obtained from Reddit. We analyze the posts and comments in that are related to suicide. We perform natural language processing to better understand different aspects of human life that relate to suicide.
 
-This poster paper was accepted by the IEEE Big Data Conference 2018 and will be presented in Seattle, WA.
+This poster paper was accepted for the IEEE Big Data Conference 2018 and will be presented in Seattle, WA this December.
 
 ## Data
 The dataset consists of 406 submissions - of which 161 were deemed relevant to suicide and depression - and 9,010 comments (responding to the 161 submissions), that were crawled from https://www.reddit.com/r/singapore/ using the **PRAW API**. [Queries](resources/jashinsky.txt) were informed by previous work in *"Tracking suicide risk factors through Twitter in the US" by J. Jashinsky, S.H. Burton, C.L. Hanson, J. West, C. Giraud-Carrier, M.D. Barnes, and T. Argyle (2013)*.
@@ -25,7 +25,7 @@ This repository was written in Python 3.7.0 and uses the following libraries hea
     ant
     ```
 - GoogleTranslate
-    **Fix:** https://stackoverflow.com/questions/52455774/googletrans-stopped-working-with-error-nonetype-object-has-no-attribute-group
+    (**Fix:** https://stackoverflow.com/questions/52455774/googletrans-stopped-working-with-error-nonetype-object-has-no-attribute-group)
     ```
     pip uninstall googletrans
     git clone https://github.com/BoseCorp/py-googletrans.git
