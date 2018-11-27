@@ -63,3 +63,4 @@ target/
 mallet-2.0.8
 py-googletrans
 suicide
+*.npy
