@@ -51,6 +51,7 @@ The `crawl_reddit.py` script can:
 python crawl_reddit.py [optional flags]
 ```
 
+
 The `preprocess.py` script prepares the data for topic modeling using Gensim or Scikit-learn
 
 ```
@@ -67,7 +68,7 @@ Both Gensim and Scikit-learn implementations of LDA topic modeling can be run fr
 - [ ] Social network analysis
 
 ## Acknowledgements
-`urlmarker.py` written by @gruber was used to Regex match urls during data cleaning.
+`urlmarker.py` written by [@gruber](https://gist.github.com/gruber/8891611) was used to Regex match urls during data cleaning.
 
 `malletmodel2ldamodel()` method is a fix for converting ldamallet to ldamodel provided by [Roger Mähler](https://groups.google.com/forum/#!topic/gensim/ZesMoKZCf4c).
 
