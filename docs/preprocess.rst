@@ -1,4 +1,4 @@
-preprocess module
+preprocess
 =================
 
 .. automodule:: preprocess

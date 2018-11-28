@@ -1,4 +1,4 @@
-utility module
+utility
 ==============
 
 .. automodule:: utility

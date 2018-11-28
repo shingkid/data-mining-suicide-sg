@@ -1,4 +1,4 @@
-crawl\_reddit module
+crawl\_reddit
 ====================
 
 .. automodule:: crawl_reddit
