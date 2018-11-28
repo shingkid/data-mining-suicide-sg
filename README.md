@@ -11,11 +11,9 @@ All data was saved to CSV format and can be found in the `data` folder included 
 
 ### Sample
 | | title | score | id | url | comms_num | created | body | author_name | query 
-|---|---|---:|---|---|---:|---|---|---|---
+|---|---|---|---|---|---|---|---|---|---
 | 0 | Update from the Depressed Asshole | 59 | 8vgrob | https://www.reddit.com/r/singapore/comments/8v... | 30 | 2018-07-02 23:26:04 | About 3-4 months ago, I posted on reddit about... | GramTooNoob | feel alone depressed
-|---|---|---|---|---|---|---|---|---|---
 | 1 | Friends, family, acquaintances of someone who ... | 20 | 5scrdi | https://www.reddit.com/r/singapore/comments/5s... | 12 | 2017-02-06 22:45:00 | How did you feel then, and how has it affected... | depressings | friend suicide
-|---|---|---|---|---|---|---|---|---|---
 | 2 | ... | ... | ... | ... | ... | ... | ... | ... | ...
 
 ## Setup
