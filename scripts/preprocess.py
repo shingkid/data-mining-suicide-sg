@@ -24,7 +24,13 @@ import utility as util
 import urlmarker
 
 
-def clean(data, dtype=list):
+def clean(data, dtype):
+    """Performs multiple data cleaning steps
+
+    Args:
+        data (ndarray): 2-dimensional ndarray containing the original text from Reddit posts
+        dtype (str): Data type in which to return - 'list' or 'str'
+    """
     # NLTK Stop words
     stop_words = stopwords.words('english')
     stop_words.extend(['singaporean', 'singapore', 'like', 'get', 'know', 'http', 'com', 'www', 'sg', 'r', 'reddit'])
@@ -82,12 +88,12 @@ def clean(data, dtype=list):
     data_words_bigrams = util.make_bigrams(bigram_mod,data_words_nostops)
 
     # Do lemmatization keeping only noun, adj, vb, adv
-    data_lemmatized = util.lemmatization(data_words_bigrams, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV'], dtype=dtype)
+    data_lemmatized = util.lemmatization(data_words_bigrams, dtype, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV'])
 
 
 def main():
     prog = "preprocess"
-    descr = "Scrape and crawl r/Singapore"
+    descr = "Preprocess data into required form"
     parser = argparse.ArgumentParser(prog=prog, description=descr)
     parser.add_argument("--gensim", help="Use Gensim topic modeling", action="store_true")
     parser.add_argument("--sklearn", help="Use Scikit-learn topic modeling", action="store_true")
@@ -111,12 +117,12 @@ def main():
 
     if args.gensim:
         t0 = time.time()
-        clean(data, dtype='list')
+        clean(data, 'list')
         print('Seconds:', time.time()-t0)
     
     if args.sklearn:
         t0 = time.time()
-        clean(data, dtype='str')
+        clean(data, 'str')
         print('Seconds:', time.time()-t0)
 
 
