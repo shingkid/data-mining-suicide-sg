@@ -93,19 +93,13 @@ def obtain_token():
 def crawl_submissions(reddit, words, subreddit_name):
     """Crawls submissions from r/Singapore
     
-    Parameters
-    ----------
-    reddit : Reddit
-        Reddit instance after authentication
-    words : set
-        set of words from a vocabulary file
-    subreddit_name : str
-        name of subreddit, e.g. Singapore
+    Args:
+        reddit (Reddit): Reddit instance after authentication
+        words (set): set of words from a vocabulary file
+        subreddit_name (str): name of subreddit, e.g. Singapore
 
-    Returns
-    -------
-    submissions : DataFrame
-        DataFrame of crawled submissions
+    Returns:
+        submissions (DataFrame): DataFrame of crawled submissions
     """
     print("Crawling submissions...")
     t0 = time.time()
@@ -162,7 +156,11 @@ def crawl_submissions(reddit, words, subreddit_name):
 
 
 def remove_irrelevant_posts():
-    """Manually screen through every submission and determine its relevance"""
+    """Manually screen through every submission and determine its relevance
+    
+    Returns:
+        df (DataFrame): DataFrame of submissions with new 'relevant' column
+    """
     filename = os.path.join('../data', 'submissions.csv')
     if not os.path.isfile(filename):
         print("Need to crawl for submissions first.")
@@ -195,15 +193,11 @@ def remove_irrelevant_posts():
 def crawl_comments(reddit):
     """Crawl comments on submissions labeled 'relevant'
     
-    Parameters
-    ----------
-    reddit : Reddit
-        Reddit instance after authentication
+    Args:
+        reddit (Reddit): Reddit instance after authentication
 
-    Returns
-    -------
-    comments : DataFrame
-        DataFrame of crawled comments
+    Returns:
+        comments (DataFrame): DataFrame of crawled comments
     """
     filename = os.path.join('../data', 'submissions-clean.csv')
 
