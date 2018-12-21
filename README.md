@@ -2,6 +2,8 @@
 ### IS470 Guided Research Project
 In this research, we focus on the social phenomenon of suicide. Specifically, we perform social sensing on digital traces obtained from Reddit. We analyze the posts and comments in that are related to suicide. We perform natural language processing to better understand different aspects of human life that relate to suicide.
 
+The poster paper for this project was accepted to the 2018 IEEE International Conference on Big Data.
+
 ## Data
 The dataset consists of 406 submissions dating from July 2010 to November 2018 - of which 161 were deemed relevant to suicide and depression - and 9,010 comments (responding to the 161 submissions), that were crawled from https://www.reddit.com/r/singapore/ using the **PRAW API**. [Queries](resources/jashinsky.txt) were informed by previous work in *"Tracking suicide risk factors through Twitter in the US" by J. Jashinsky, S.H. Burton, C.L. Hanson, J. West, C. Giraud-Carrier, M.D. Barnes, and T. Argyle (2013)*.
 
