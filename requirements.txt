@@ -26,7 +26,7 @@ more-itertools==4.3.0
 msgpack==0.5.6
 msgpack-numpy==0.4.3.2
 murmurhash==1.0.1
-nltk==3.4.5
+nltk==3.6.6
 numexpr==2.6.8
 numpy==1.22.0
 pandas==0.23.4
